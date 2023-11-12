@@ -3,8 +3,6 @@ const startButton = body.querySelector('button[data-start]');
 const stopButton = body.querySelector('button[data-stop]');
 let intervalID;
 
-console.log(body);
-console.log(stopButton);
 stopButton.setAttribute('disabled', true);
 
 startButton.addEventListener('click', startButtonClickHandler);

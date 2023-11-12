@@ -1,33 +1,44 @@
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
+const form = document.querySelector('.form');
 const firstDelayField = document.querySelector('input[name="delay"]');
 const stepOfDelayField = document.querySelector('input[name="step"]');
 const numberOfDelaysField = document.querySelector('input[name="amount"]');
-const createPromisesButton = document.querySelector('button[type="submit"]');
-let firstDelay;
-let stepOfDelay;
-let numberOfDelays;
 
-firstDelayField.addEventListener('blur', evt => {
-  firstDelay = firstDelayField.value;
-});
-
-stepOfDelayField.addEventListener('blur', evt => {
-  stepOfDelay = stepOfDelayField.value;
-});
-
-numberOfDelaysField.addEventListener('blur', evt => {
-  numberOfDelays = numberOfDelaysField.value;
-});
-
-createPromisesButton.addEventListener('submit', createPromiseClickHandler);
+form.addEventListener('submit', createPromiseClickHandler);
 function createPromiseClickHandler(evt) {
   evt.preventDefault();
-  for (let i = 1; i <= numberOfDelays; i++) {
-    createPromise(i, firstDelay + stepOfDelay * (i - 1))
+  iziToast.destroy();
+
+  for (let i = 1; i <= Number(numberOfDelaysField.value); i++) {
+    createPromise(
+      i,
+      Number(firstDelayField.value) + Number(stepOfDelayField.value) * (i - 1)
+    )
       .then(({ position, delay }) => {
-        console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        //console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        iziToast.show({
+          message: `✅ Fulfilled promise ${position} in ${delay}ms`,
+          close: false,
+          backgroundColor: 'green',
+          messageColor: 'white',
+          messageSize: 20,
+          timeout: 0,
+          position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+        });
       })
       .catch(({ position, delay }) => {
-        console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+        //console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+        iziToast.show({
+          message: `❌ Rejected promise ${position} in ${delay}ms`,
+          close: false,
+          backgroundColor: 'red',
+          messageColor: 'white',
+          messageSize: 20,
+          timeout: 0,
+          position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+        });
       });
   }
 }
@@ -35,10 +46,12 @@ function createPromiseClickHandler(evt) {
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-    if (shouldResolve) {
-      resolve({ position, delay });
-    } else {
-      reject({ position, delay });
-    }
+    setTimeout(() => {
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
   });
 }

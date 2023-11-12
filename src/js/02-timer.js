@@ -23,12 +23,11 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     selecteddDate = selectdDate.selectedDates[0];
-    if (currentDate.getTime() > selecteddDate.getTime()) {
-      //instance.close;
+    if (currentDate.getTime() > selecteddDate.getTime()) {      
       //alert('Please choose a date in the future');
       iziToast.show({
         //title: 'Error',
-        message: 'Please choose a date in the future',
+        message: '❌ Please choose a date in the future',
         close: false,
         backgroundColor: 'red',
         messageColor: 'white',
@@ -51,11 +50,6 @@ startButton.setAttribute("disabled", true);
 timeSelector.addEventListener('change', selectDateHandler);
 function selectDateHandler() {
   iziToast.destroy();
-//   //console.log(selectdDate.selectedDates[0], 'date in handler');
-//   startButton.removeAttribute('disabled');
-//   //   selectdDate.onClose(selecteddDate, () => {
-
-//   //   })
  }
 
 startButton.addEventListener('click', startTimeCountHandler);
