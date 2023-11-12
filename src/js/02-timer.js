@@ -1,6 +1,9 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css"
+
 const timeSelector = document.querySelector('input[id="datetime-picker"]');
 const startButton = document.querySelector('button[data-start]');
 const daysCounter = document.querySelector('span[data-days]');
@@ -22,22 +25,38 @@ const options = {
     selecteddDate = selectdDate.selectedDates[0];
     if (currentDate.getTime() > selecteddDate.getTime()) {
       //instance.close;
-      alert('Please choose a date in the future');
+      //alert('Please choose a date in the future');
+      iziToast.show({
+        //title: 'Error',
+        message: 'Please choose a date in the future',
+        close: false,
+        backgroundColor: 'red',
+        messageColor: 'white',
+        messageSize: 20,
+        timeout: 0,
+        position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+    });
+      startButton.setAttribute("disabled", true);
+    }
+    else{
+      startButton.removeAttribute("disabled");
     }
   },
 };
 
 const selectdDate = flatpickr(timeSelector, options);
 
+startButton.setAttribute("disabled", true);
 
 timeSelector.addEventListener('change', selectDateHandler);
 function selectDateHandler() {
-  console.log(selectdDate.selectedDates[0], 'date in handler');
+  iziToast.destroy();
+//   //console.log(selectdDate.selectedDates[0], 'date in handler');
+//   startButton.removeAttribute('disabled');
+//   //   selectdDate.onClose(selecteddDate, () => {
 
-  //   selectdDate.onClose(selecteddDate, () => {
-
-  //   })
-}
+//   //   })
+ }
 
 startButton.addEventListener('click', startTimeCountHandler);
 
