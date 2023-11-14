@@ -49,6 +49,7 @@ startButton.setAttribute('disabled', true);
 timeSelector.addEventListener('change', selectDateHandler);
 function selectDateHandler() {
   iziToast.destroy();
+  
 }
 
 startButton.addEventListener('click', startTimeCountHandler);
@@ -92,7 +93,7 @@ function startTimeCountHandler() {
     diff = selecteddDate.getTime() - currentDate.getTime();
     if (diff < 1000) {
       clearInterval(timeIntervalID);
-      startButton.removeAttribute('disabled');
+      //startButton.removeAttribute('disabled');
       timeSelector.removeAttribute('disabled');
     }
   }, 1000);

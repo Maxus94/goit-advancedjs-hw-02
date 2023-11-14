@@ -23,7 +23,7 @@ function createPromiseClickHandler(evt) {
           backgroundColor: 'green',
           messageColor: 'white',
           messageSize: 20,
-          timeout: 0,
+          //timeout: 0,
           position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
         });
       })
@@ -35,7 +35,7 @@ function createPromiseClickHandler(evt) {
           backgroundColor: 'red',
           messageColor: 'white',
           messageSize: 20,
-          timeout: 0,
+          //timeout: 0,
           position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
         });
       });
