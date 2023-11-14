@@ -1,8 +1,8 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css"
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const timeSelector = document.querySelector('input[id="datetime-picker"]');
 const startButton = document.querySelector('button[data-start]');
@@ -23,7 +23,7 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     selecteddDate = selectdDate.selectedDates[0];
-    if (currentDate.getTime() > selecteddDate.getTime()) {      
+    if (currentDate.getTime() > selecteddDate.getTime()) {
       //alert('Please choose a date in the future');
       iziToast.show({
         //title: 'Error',
@@ -34,44 +34,66 @@ const options = {
         messageSize: 20,
         timeout: 0,
         position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
-    });
-      startButton.setAttribute("disabled", true);
-    }
-    else{
-      startButton.removeAttribute("disabled");
+      });
+      startButton.setAttribute('disabled', true);
+    } else {
+      startButton.removeAttribute('disabled');
     }
   },
 };
 
 const selectdDate = flatpickr(timeSelector, options);
 
-startButton.setAttribute("disabled", true);
+startButton.setAttribute('disabled', true);
 
 timeSelector.addEventListener('change', selectDateHandler);
 function selectDateHandler() {
   iziToast.destroy();
- }
+}
 
 startButton.addEventListener('click', startTimeCountHandler);
 
 function startTimeCountHandler() {
+  if (new Date() - selecteddDate > 1000) {
+    iziToast.show({
+      //title: 'Error',
+      message: '❌ Please choose a date in the future',
+      close: false,
+      backgroundColor: 'red',
+      messageColor: 'white',
+      messageSize: 20,
+      timeout: 0,
+      position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+    });
+    startButton.setAttribute('disabled', true);
+    return;
+  }
+  startButton.setAttribute('disabled', true);
+  timeSelector.setAttribute('disabled', true);
   timeIntervalID = setInterval(() => {
     currentDate = new Date();
-    daysCounter.textContent = convertMs(
+    const daysLeft = convertMs(
       selecteddDate.getTime() - currentDate.getTime()
     ).days;
-    hoursCounter.textContent = convertMs(
-      selecteddDate.getTime() - currentDate.getTime()
-    ).hours;
-    minutesCounter.textContent = convertMs(
-      selecteddDate.getTime() - currentDate.getTime()
-    ).minutes;
-    secondsCounter.textContent = convertMs(
-      selecteddDate.getTime() - currentDate.getTime()
-    ).seconds;
+    if (daysLeft > 9) {
+      daysCounter.textContent = daysLeft;
+    } else {
+      daysCounter.textContent = addLeadingZero(daysLeft);
+    }
+    hoursCounter.textContent = addLeadingZero(
+      convertMs(selecteddDate.getTime() - currentDate.getTime()).hours
+    );
+    minutesCounter.textContent = addLeadingZero(
+      convertMs(selecteddDate.getTime() - currentDate.getTime()).minutes
+    );
+    secondsCounter.textContent = addLeadingZero(
+      convertMs(selecteddDate.getTime() - currentDate.getTime()).seconds
+    );
     diff = selecteddDate.getTime() - currentDate.getTime();
-    if (diff <= 0) {
+    if (diff < 1000) {
       clearInterval(timeIntervalID);
+      startButton.removeAttribute('disabled');
+      timeSelector.removeAttribute('disabled');
     }
   }, 1000);
 }
@@ -93,4 +115,8 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }

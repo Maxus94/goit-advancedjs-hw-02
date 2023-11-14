@@ -9,8 +9,7 @@ const numberOfDelaysField = document.querySelector('input[name="amount"]');
 form.addEventListener('submit', createPromiseClickHandler);
 function createPromiseClickHandler(evt) {
   evt.preventDefault();
-  iziToast.destroy();
-
+  iziToast.destroy();  
   for (let i = 1; i <= Number(numberOfDelaysField.value); i++) {
     createPromise(
       i,
@@ -20,7 +19,7 @@ function createPromiseClickHandler(evt) {
         //console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
         iziToast.show({
           message: `✅ Fulfilled promise ${position} in ${delay}ms`,
-          close: false,
+          close: true,
           backgroundColor: 'green',
           messageColor: 'white',
           messageSize: 20,
@@ -32,7 +31,7 @@ function createPromiseClickHandler(evt) {
         //console.log(`❌ Rejected promise ${position} in ${delay}ms`);
         iziToast.show({
           message: `❌ Rejected promise ${position} in ${delay}ms`,
-          close: false,
+          close: true,
           backgroundColor: 'red',
           messageColor: 'white',
           messageSize: 20,
@@ -41,6 +40,7 @@ function createPromiseClickHandler(evt) {
         });
       });
   }
+  form.reset();
 }
 
 function createPromise(position, delay) {
